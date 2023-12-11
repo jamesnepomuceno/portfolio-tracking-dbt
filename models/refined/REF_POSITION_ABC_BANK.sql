@@ -1,8 +1,17 @@
 WITH
 current_from_snapshot as (
-    SELECT *
-    FROM {{ ref('SNSH_ABC_BANK_POSITION') }}
-    WHERE DBT_VALID_TO is null
+    -- Removed to use MACROS
+    -- SELECT *
+    -- FROM {{ ref('SNSH_ABC_BANK_POSITION') }}
+    -- WHERE DBT_VALID_TO is null
+
+    -- That's the MACRO
+    {{
+        current_from_snapshot(
+            snsh_ref=ref('SNSH_ABC_BANK_POSITION'),
+            output_load_ts = false
+        )
+    }}
 )
 
 select 
