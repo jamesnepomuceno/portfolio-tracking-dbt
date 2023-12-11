@@ -38,10 +38,12 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   my_new_project:
     +materialized: view    
-    
+
+      
     staging: # Data storage layer
       +materialized: view
       +schema: STAGING
+      
     refined: # Refined data layer
       +materialized: view
       +schema: REFINED
@@ -52,3 +54,13 @@ models:
 snapshots:
   my_new_project:
     +target_schema: SNAPSHOTS
+
+seeds:
+  +schema: seed_data
+  ABC_Bank_SECURITY_INFO:
+      +column_types:
+      LOAD_TS: TIMESTAMP
+      +post-hook:
+        - "UPDATE {{ this }} SET LOAD_TS = '{{ run_started_at }}' WHERE LOAD_TS is null"
+  
+
